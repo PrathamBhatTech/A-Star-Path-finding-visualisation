@@ -91,8 +91,8 @@ class Node:
         if self.col > 0 and not grid[self.row][self.col - 1].is_barrier():
             self.neighbors.append(grid[self.row][self.col - 1])
 
-    def __lt__(self, other):
-        return False
+    # def __lt__(self, other):
+    #    return False
 
 
 def h(p1, p2):
@@ -114,7 +114,7 @@ def algorithm(draw, grid, start, end):
 
     open_set_hash = {start}
 
-    while open_set.empty():
+    while not open_set.empty():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -124,6 +124,10 @@ def algorithm(draw, grid, start, end):
 
         # Make path
         if current == end:
+            print(came_from)
+            for i in range(len(came_from)):
+                came_from[i].make_path()
+
             return True
 
         for neighbor in current.neighbors:
@@ -139,12 +143,12 @@ def algorithm(draw, grid, start, end):
                     open_set_hash.add(neighbor)
                     neighbor.make_open()
 
-            draw()
+        draw()
 
-            if current != start:
-                current.make_close()
+        if current != start:
+            current.make_close()
 
-            return False
+    return False
 
 
 def make_grid(rows, width):
